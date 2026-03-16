@@ -26,7 +26,7 @@ kotlin {
     wasmJs {
         browser {
             commonWebpackConfig {
-                outputFileName = "pinchResizeGrid.js"
+                outputFileName = "pinchGrid.js"
             }
         }
         binaries.executable()
@@ -49,7 +49,7 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
-            implementation(project(":pinch-resize-grid"))
+            implementation(project(":pinch-grid"))
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor3)
         }
@@ -78,11 +78,11 @@ kotlin {
 }
 
 android {
-    namespace = "io.github.aldefy.pinchresizegrid.sample"
+    namespace = "io.github.aldefy.pinchgrid.sample"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "io.github.aldefy.pinchresizegrid.sample"
+        applicationId = "io.github.aldefy.pinchgrid.sample"
         minSdk = 23
         targetSdk = 35
         versionCode = 1
@@ -108,10 +108,10 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "io.github.aldefy.pinchresizegrid.sample.MainKt"
+        mainClass = "io.github.aldefy.pinchgrid.sample.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "PinchResizeGrid Sample"
+            packageName = "PinchGrid Sample"
             packageVersion = "1.0.0"
         }
     }

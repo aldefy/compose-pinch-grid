@@ -1,0 +1,65 @@
+public abstract class io/github/aldefy/pinchgrid/ColumnTransitionSpec {
+	public static final field $stable I
+}
+
+public final class io/github/aldefy/pinchgrid/ColumnTransitionSpec$Crossfade : io/github/aldefy/pinchgrid/ColumnTransitionSpec {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun copy (I)Lio/github/aldefy/pinchgrid/ColumnTransitionSpec$Crossfade;
+	public static synthetic fun copy$default (Lio/github/aldefy/pinchgrid/ColumnTransitionSpec$Crossfade;IILjava/lang/Object;)Lio/github/aldefy/pinchgrid/ColumnTransitionSpec$Crossfade;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDurationMillis ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/aldefy/pinchgrid/ColumnTransitionSpec$None : io/github/aldefy/pinchgrid/ColumnTransitionSpec {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/aldefy/pinchgrid/ColumnTransitionSpec$None;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/aldefy/pinchgrid/PinchGridDefaults {
+	public static final field $stable I
+	public static final field DeadZone F
+	public static final field INSTANCE Lio/github/aldefy/pinchgrid/PinchGridDefaults;
+	public static final field InitialColumnCount I
+	public static final field MaxColumns I
+	public static final field MinColumns I
+	public static final field PinchOutThresholdMultiplier F
+	public static final field ThresholdFraction F
+	public final fun getTransitionSpec ()Lio/github/aldefy/pinchgrid/ColumnTransitionSpec;
+}
+
+public final class io/github/aldefy/pinchgrid/PinchGridKt {
+	public static final fun PinchGrid (Lio/github/aldefy/pinchgrid/PinchGridState;Landroidx/compose/ui/Modifier;Landroidx/compose/foundation/lazy/grid/LazyGridState;Landroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/foundation/layout/Arrangement$Vertical;Landroidx/compose/foundation/layout/Arrangement$Horizontal;FLio/github/aldefy/pinchgrid/ColumnTransitionSpec;ZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;III)V
+}
+
+public final class io/github/aldefy/pinchgrid/PinchGridState {
+	public static final field $stable I
+	public static final field Companion Lio/github/aldefy/pinchgrid/PinchGridState$Companion;
+	public fun <init> ()V
+	public fun <init> (III)V
+	public synthetic fun <init> (IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getColumnCount ()I
+	public final fun getMaxColumns ()I
+	public final fun getMinColumns ()I
+	public final fun getPreviousColumnCount ()I
+	public final fun getScaleProgress ()F
+	public final fun isZoomingIn ()Ljava/lang/Boolean;
+	public final fun snapToColumn (I)V
+}
+
+public final class io/github/aldefy/pinchgrid/PinchGridState$Companion {
+	public final fun Saver (II)Landroidx/compose/runtime/saveable/Saver;
+}
+
+public final class io/github/aldefy/pinchgrid/PinchGridStateKt {
+	public static final fun rememberPinchGridState (IIILandroidx/compose/runtime/Composer;II)Lio/github/aldefy/pinchgrid/PinchGridState;
+}
+

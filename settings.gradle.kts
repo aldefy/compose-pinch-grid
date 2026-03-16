@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "compose-pinch-resize-grid"
-include(":pinch-resize-grid")
+rootProject.name = "compose-pinch-grid"
+include(":pinch-grid")
 include(":sample")

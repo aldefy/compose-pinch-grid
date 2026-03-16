@@ -1,8 +1,8 @@
-# Compose Pinch Resize Grid
+# ComposePinchGrid
 
 A **Google Photos-style** pinch-to-resize grid for Compose Multiplatform. Pinch to change column count with haptic feedback, breathing scale animation, and smooth transitions. Built on Compose Foundation — no Material dependency.
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.aldefy/pinch-resize-grid?color=blue)](https://central.sonatype.com/artifact/io.github.aldefy/pinch-resize-grid)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.aldefy/pinch-grid?color=blue)](https://central.sonatype.com/artifact/io.github.aldefy/pinch-grid)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.20-purple.svg)](https://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.8.0-blue)](https://www.jetbrains.com/compose-multiplatform/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
@@ -16,7 +16,7 @@ A **Google Photos-style** pinch-to-resize grid for Compose Multiplatform. Pinch 
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("io.github.aldefy:pinch-resize-grid:1.0.0-alpha01")
+    implementation("io.github.aldefy:pinch-grid:1.0.0-alpha01")
 }
 ```
 
@@ -25,9 +25,9 @@ dependencies {
 ```kotlin
 @Composable
 fun PhotoGrid(photos: List<Photo>) {
-    val state = rememberPinchResizeGridState()
+    val state = rememberPinchGridState()
 
-    PinchResizeGrid(state = state) {
+    PinchGrid(state = state) {
         items(photos, key = { it.id }) { photo ->
             AsyncImage(
                 model = photo.url,
@@ -43,19 +43,19 @@ That's it. Pinch to resize, haptic on snap, scroll position preserved.
 
 ## API
 
-### PinchResizeGrid
+### PinchGrid
 
 ```kotlin
 @Composable
-fun PinchResizeGrid(
-    state: PinchResizeGridState,
+fun PinchGrid(
+    state: PinchGridState,
     modifier: Modifier = Modifier,
     gridState: LazyGridState = rememberLazyGridState(),
     contentPadding: PaddingValues = PaddingValues(),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(0.dp),
-    thresholdFraction: Float = PinchResizeGridDefaults.ThresholdFraction,
-    transitionSpec: ColumnTransitionSpec = PinchResizeGridDefaults.TransitionSpec,
+    thresholdFraction: Float = PinchGridDefaults.ThresholdFraction,
+    transitionSpec: ColumnTransitionSpec = PinchGridDefaults.TransitionSpec,
     gestureEnabled: Boolean = true,
     onColumnChanged: ((newCount: Int) -> Unit)? = null,
     content: LazyGridScope.() -> Unit,
@@ -65,7 +65,7 @@ fun PinchResizeGrid(
 ### State
 
 ```kotlin
-val state = rememberPinchResizeGridState(
+val state = rememberPinchGridState(
     initialColumnCount = 3,  // start with 3 columns
     minColumns = 1,          // full-width single item (zoom in limit)
     maxColumns = 5,          // dense grid (zoom out limit)
@@ -90,7 +90,7 @@ The gesture feel is highly configurable. All parameters have tuned defaults:
 Controls how much pinch is needed to trigger a column change. Lower = more sensitive.
 
 ```kotlin
-PinchResizeGrid(
+PinchGrid(
     state = state,
     thresholdFraction = 0.45f,  // default — responsive but not accidental
     // thresholdFraction = 0.2f,  // very sensitive — small pinch triggers change
@@ -121,13 +121,13 @@ The `0.01f` dead zone filters micro-movements. Without it, tiny finger tremors w
 
 ```kotlin
 // Google Photos style — instant reflow, no animation (default)
-PinchResizeGrid(
+PinchGrid(
     state = state,
     transitionSpec = ColumnTransitionSpec.None,
 ) { /* content */ }
 
 // Crossfade — smooth opacity transition between layouts
-PinchResizeGrid(
+PinchGrid(
     state = state,
     transitionSpec = ColumnTransitionSpec.Crossfade(durationMillis = 200),
 ) { /* content */ }
@@ -169,14 +169,14 @@ Fires automatically on every column snap:
 ## Programmatic Control
 
 ```kotlin
-val state = rememberPinchResizeGridState()
+val state = rememberPinchGridState()
 
 // Buttons
 Button(onClick = { state.snapToColumn(state.columnCount - 1) }) { Text("Zoom In") }
 Button(onClick = { state.snapToColumn(state.columnCount + 1) }) { Text("Zoom Out") }
 
 // Respond to changes
-PinchResizeGrid(
+PinchGrid(
     state = state,
     onColumnChanged = { newCount -> analytics.log("columns_changed", newCount) },
 ) { /* content */ }
@@ -206,13 +206,13 @@ The included sample app demonstrates all features with 50 random photos, a live 
 
 ```bash
 # Build library for all targets
-./gradlew :pinch-resize-grid:build
+./gradlew :pinch-grid:build
 
 # Generate API dump (after adding public API)
-./gradlew :pinch-resize-grid:apiDump
+./gradlew :pinch-grid:apiDump
 
 # Publish to local staging (for Maven Central upload)
-./gradlew :pinch-resize-grid:publishAllPublicationsToLocalStagingRepository \
+./gradlew :pinch-grid:publishAllPublicationsToLocalStagingRepository \
     -Psigning.gnupg.keyName=F30A3C2E
 ```
 
