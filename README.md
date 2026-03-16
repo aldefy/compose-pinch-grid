@@ -11,6 +11,14 @@ A **Google Photos-style** pinch-to-resize grid for Compose Multiplatform. Pinch 
 |:-------:|:---:|:-------------:|:----------:|
 |    ✓    |  ✓  |       ✓       |     ✓      |
 
+## Demo
+
+<p align="center">
+  <img src="assets/demo.gif" width="280" alt="ComposePinchGrid demo — pinch to resize grid columns" />
+</p>
+
+> Full quality video: [assets/demo.mp4](assets/demo.mp4)
+
 ## Installation
 
 ```kotlin
