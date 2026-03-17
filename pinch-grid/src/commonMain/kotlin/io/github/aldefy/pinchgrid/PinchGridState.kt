@@ -63,10 +63,14 @@ public class PinchGridState(
     internal var scaleAccumulator: Float by mutableFloatStateOf(0f)
 
     /**
-     * Saved first visible item index, snapshotted before each column change.
-     * Used by [PinchGrid] to restore scroll position after recomposition.
+     * Saved anchor item index (center of viewport), snapshotted before each column change.
+     * Using center anchor instead of first-visible prevents the "crawl to top" effect
+     * when zooming in at the bottom of the list — same approach as Google Photos.
      */
-    internal var savedFirstVisibleItemIndex: Int by mutableIntStateOf(0)
+    internal var savedAnchorItemIndex: Int by mutableIntStateOf(0)
+
+    /** Whether a scroll restoration is pending. */
+    internal var pendingScrollRestore: Boolean by mutableStateOf(false)
 
     /** Callback invoked when column count changes. Set by the composable. */
     internal var onColumnChanged: ((Int) -> Unit)? = null
@@ -76,6 +80,22 @@ public class PinchGridState(
 
     /** Grid state reference for snapshotting scroll position. Set by the composable. */
     internal var gridStateRef: LazyGridState? = null
+
+    /**
+     * Snapshot the center visible item index from the grid.
+     * Center-anchoring keeps the user's focal point stable across column changes.
+     */
+    private fun snapshotCenterItem() {
+        gridStateRef?.let { grid ->
+            val visibleItems = grid.layoutInfo.visibleItemsInfo
+            if (visibleItems.isNotEmpty()) {
+                val centerItem = visibleItems[visibleItems.size / 2]
+                savedAnchorItemIndex = centerItem.index
+            } else {
+                savedAnchorItemIndex = grid.firstVisibleItemIndex
+            }
+        }
+    }
 
     /**
      * Called by the gesture modifier on each scale event.
@@ -126,8 +146,9 @@ public class PinchGridState(
             }
 
             if (newCount != columnCount) {
-                // Snapshot scroll position BEFORE mutating columnCount
-                gridStateRef?.let { savedFirstVisibleItemIndex = it.firstVisibleItemIndex }
+                // Snapshot center item BEFORE mutating columnCount
+                snapshotCenterItem()
+                pendingScrollRestore = true
                 previousColumnCount = columnCount
                 columnCount = newCount
                 hapticFeedback?.invoke()
@@ -147,14 +168,35 @@ public class PinchGridState(
     public fun snapToColumn(target: Int) {
         val clamped = target.coerceIn(minColumns, maxColumns)
         if (clamped != columnCount) {
-            // Snapshot scroll position BEFORE mutating columnCount
-            gridStateRef?.let { savedFirstVisibleItemIndex = it.firstVisibleItemIndex }
+            // Snapshot center item BEFORE mutating columnCount
+            snapshotCenterItem()
+            pendingScrollRestore = true
             previousColumnCount = columnCount
             columnCount = clamped
             scaleAccumulator = 0f
             scaleProgress = 0f
             hapticFeedback?.invoke()
             onColumnChanged?.invoke(clamped)
+        }
+    }
+
+    /** Column count to return to after double-tap zoom out. */
+    internal var columnCountBeforeDoubleTap: Int? = null
+
+    /**
+     * Toggle zoom on double-tap — like Google Photos.
+     * First tap: zoom to [minColumns] (fully zoomed in).
+     * Second tap: return to previous column count.
+     */
+    internal fun toggleZoom() {
+        if (columnCount == minColumns && columnCountBeforeDoubleTap != null) {
+            // Already zoomed in — zoom back out to previous
+            snapToColumn(columnCountBeforeDoubleTap!!)
+            columnCountBeforeDoubleTap = null
+        } else {
+            // Zoom in to single column
+            columnCountBeforeDoubleTap = columnCount
+            snapToColumn(minColumns)
         }
     }
 

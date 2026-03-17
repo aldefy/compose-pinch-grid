@@ -50,6 +50,12 @@ public object PinchGridDefaults {
      */
     public const val HapticEnabled: Boolean = true
 
+    /**
+     * Whether double-tap-to-zoom is enabled.
+     * Double-tap toggles between current columns and [MinColumns] (fully zoomed in).
+     */
+    public const val DoubleTapEnabled: Boolean = true
+
     /** Default transition spec for column count changes. Google Photos uses None. */
     public val TransitionSpec: ColumnTransitionSpec = ColumnTransitionSpec.None
 }

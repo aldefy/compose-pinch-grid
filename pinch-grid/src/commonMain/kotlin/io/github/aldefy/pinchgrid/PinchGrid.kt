@@ -44,6 +44,7 @@ public fun PinchGrid(
     breathingScaleIntensity: Float = PinchGridDefaults.BreathingScaleIntensity,
     breathingReturnDuration: Int = PinchGridDefaults.BreathingReturnDuration,
     hapticEnabled: Boolean = PinchGridDefaults.HapticEnabled,
+    doubleTapEnabled: Boolean = PinchGridDefaults.DoubleTapEnabled,
     transitionSpec: ColumnTransitionSpec = PinchGridDefaults.TransitionSpec,
     gestureEnabled: Boolean = true,
     onColumnChanged: ((newCount: Int) -> Unit)? = null,
@@ -55,11 +56,12 @@ public fun PinchGrid(
     state.gridStateRef = gridState
 
     // Restore scroll position after column count change.
-    // The position was snapshotted in PinchGridState BEFORE columnCount was mutated,
-    // so it holds the correct pre-change position.
-    LaunchedEffect(state.columnCount) {
-        if (state.savedFirstVisibleItemIndex > 0) {
-            gridState.scrollToItem(state.savedFirstVisibleItemIndex)
+    // We anchor on the CENTER visible item (not first-visible) so zooming in at the
+    // bottom of the list doesn't "crawl to top" — same strategy as Google Photos.
+    if (state.pendingScrollRestore) {
+        LaunchedEffect(state.columnCount) {
+            gridState.scrollToItem(state.savedAnchorItemIndex)
+            state.pendingScrollRestore = false
         }
     }
 
@@ -89,6 +91,7 @@ public fun PinchGrid(
             thresholdFraction = thresholdFraction,
             deadZone = deadZone,
             pinchOutMultiplier = pinchOutThresholdMultiplier,
+            doubleTapEnabled = doubleTapEnabled,
             enabled = gestureEnabled,
         ),
     ) {
